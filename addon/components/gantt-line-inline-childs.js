@@ -103,6 +103,7 @@ export default Component.extend({
         period.width = chart.dateToOffset(period.dateEnd, period.dateStart, true);
         period.background = this.getBackgroundStyle(period.childs);
         period.style = htmlSafe(`width:${period.width}px;background:${period.background};`);
+        period.title = htmlSafe(`${period.dateStart.toLocaleDateString()} - ${period.dateEnd.toLocaleDateString()} (${dateUtil.diffDays( period.dateStart, period.dateEnd, true)})`)
       });
     }
 
