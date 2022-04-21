@@ -3,9 +3,9 @@
 <div class="gantt-line">
 
   {{! title - from title attribute or }}
-  {{#if title}}
+  {{#if this.title}}
     <div class="gantt-line-title">
-      <span>{{title}}</span>
+      <span>{{this.title}}</span>
     </div>
   {{else}}
     {{yield
@@ -18,18 +18,18 @@
 
     {{! bar }}
     <div
-      class="gantt-line-bar {{if isEditable "gantt-line-bar-editable"}}"
-      style={{barStyle}}
-      title={{barTitle}}
+      class="gantt-line-bar {{if this.isEditable "gantt-line-bar-editable"}}"
+      style={{this.barStyle}}
+      title={{this.barTitle}}
     >
       {{yield
         (hash
-          inlineChilds=(component "gantt-line-inline-childs" parentLine=this chart=chart)
+          inlineChilds=(component "gantt-line-inline-childs" parentLine=this chart=this.chart)
           barContent=(component "gantt-line-barcontent" line=this)
         )
       }}
 
-      {{#if isEditable}}
+      {{#if this.isEditable}}
         <div class="bar-resize-l"></div>
         <div class="bar-resize-r"></div>
       {{/if}}
@@ -37,7 +37,7 @@
     </div>
 
     {{! milestone(s) }}
-    {{yield (hash milestone=(component "gantt-milestone" line=this chart=chart)) }}
+    {{yield (hash milestone=(component "gantt-milestone" line=this chart=this.chart)) }}
 
   </div>
 </div>
@@ -49,7 +49,7 @@
 <div class="gantt-line-childs">
   {{yield
     (hash
-	    childLine=(component "gantt-line" chart=chart  parentLine=this)
+	    childLine=(component "gantt-line" chart=this.chart parentLine=this)
     )
   }}
 </div>

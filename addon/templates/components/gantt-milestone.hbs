@@ -1,10 +1,10 @@
 <div class="gantt-line-milestone-icon"></div>
 <div class="gantt-line-milestone-title">
-  {{#if hasBlock }}
+  {{#if (has-block)}}
     {{yield}}
 
   {{else}}
-    <span>{{formattedDate}}</span>{{title}}
+    <span>{{this.formattedDate}}</span>{{this.title}}
 
   {{/if}}
 </div>
