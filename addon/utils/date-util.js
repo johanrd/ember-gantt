@@ -1,7 +1,7 @@
 import { isArray, A } from "@ember/array";
 import { get } from "@ember/object";
 import { isNone, isEqual, isEmpty } from "@ember/utils";
-import { htmlSafe } from '@ember/string';
+import { htmlSafe } from '@ember/template';
 
 
 /**

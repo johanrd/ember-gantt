@@ -6,7 +6,7 @@ import {
   setProperties
 } from '@ember/object';
 import { alias } from '@ember/object/computed';
-import { htmlSafe } from '@ember/string';
+import { htmlSafe } from '@ember/template';
 import { isNone } from '@ember/utils';
 import { bind } from '@ember/runloop';
 
@@ -214,15 +214,17 @@ export default Component.extend({
   },
 
   timelineScale: computed('viewStartDate', 'viewEndDate', 'dayWidth', 'specialDays','chart.ganttWidth', function() {
-
+    
     const chart = get(this, 'chart');
     let start = dateUtil.getNewDate(get(this, 'viewStartDate')),
         end = dateUtil.getNewDate(get(this, 'viewEndDate')),
         dayWidth = get(this, 'dayWidth');
-
+        // console.log('timelineScale', start, end, dayWidth)
     if (!start || !end || !(start<end)) {
       return [];
     }
+
+    
 
     // calculate total scale width
     let scaleWidth = this.calculateScaleWidth(dayWidth, start, end);

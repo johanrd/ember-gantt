@@ -1,5 +1,5 @@
 import { bind, next } from '@ember/runloop';
-import { htmlSafe } from '@ember/string';
+import { htmlSafe } from '@ember/template';
 import { computed, get, set, observer } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { alias, or } from '@ember/object/computed';

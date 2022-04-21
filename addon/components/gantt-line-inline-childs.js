@@ -1,6 +1,6 @@
 import { observer, get, set } from '@ember/object';
 import { throttle } from '@ember/runloop';
-import { htmlSafe } from '@ember/string';
+import { htmlSafe } from '@ember/template';
 import { isArray, A } from "@ember/array";
 import { isEmpty } from "@ember/utils";
 
