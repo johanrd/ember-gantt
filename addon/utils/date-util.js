@@ -5,7 +5,7 @@ import { htmlSafe } from '@ember/template';
 
 
 /**
- * The date-util contains some helpful date-functions to work with UTC dates and calculate time-periods.
+ * The date-util contains some helpful date-functions to work with dates and calculate time-periods.
  *
  * @class DateUtil
  * @namespace Utils
@@ -14,11 +14,11 @@ import { htmlSafe } from '@ember/template';
 export default {
 
   /**
-   * Get new date (from given date) in UTC and without time!
+   * Get new date (from given date) and without time!
    *
    * @method getNewDate
    * @param {Date}  fromDate
-   * @return {Date} cloned date with 0 time in UTC TZ
+   * @return {Date} cloned date with 0 time TZ
    * @public
    */
   getNewDate(fromDate) {
@@ -43,15 +43,15 @@ export default {
   },
 
   /**
-   * Remove time from date (set 0) and set to UTC
+   * Remove time from date (set 0)
    *
    * @method dateNoTime
    * @param {Date}  date
-   * @return {Date} date without time in UTC
+   * @return {Date} date without time
    * @public
    */
   dateNoTime(date) {
-    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   },
 
   /**
@@ -65,7 +65,7 @@ export default {
    */
   datePlusDays(date, days) {
     let newDate = this.getNewDate(date);
-    newDate.setUTCDate(newDate.getUTCDate() + days);
+    newDate.setDate(newDate.getDate() + days);
     return newDate;
   },
 
@@ -79,9 +79,9 @@ export default {
    */
   daysInMonth(date) {
     let newDate = this.getNewDate(date);
-    newDate.setUTCMonth(newDate.getUTCMonth()+1);
-    newDate.setUTCDate(0);  // set to last day of previous month
-    return newDate.getUTCDate();
+    newDate.setMonth(newDate.getMonth()+1);
+    newDate.setDate(0);  // set to last day of previous month
+    return newDate.getDate();
   },
 
   /**
@@ -98,10 +98,7 @@ export default {
 
     if (!startDate || !endDate) return;
 
-    startDate.setUTCHours(0,0,0,0);
-    endDate.setUTCHours(0,0,0,0);
-
-    let diffDays = Math.floor((endDate.getTime() - startDate.getTime()) / (86400000)); // 86400000 = 24*60*60*1000;
+    let diffDays = Math.floor((this.getNewDate(endDate).getTime() - this.getNewDate(startDate).getTime()) / (24*60*60*1000));
 
     if (includeLastDay) {
       diffDays+=1;
@@ -123,8 +120,8 @@ export default {
 
     // Set to nearest Thursday: current date + 4 - current day number
     // Make Sunday's day number 7
-    date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay()||7)); // Get first day of year
-    let yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1)); // Calculate full weeks to nearest Thursday
+    date.setDate(date.getDate() + 4 - (date.getDay()||7)); // Get first day of year
+    let yearStart = new Date(date.getFullYear(),0,1); // Calculate full weeks to nearest Thursday
     let week = Math.ceil(( ( (date - yearStart) / 86400000) + 1)/7);
 
     return week;
@@ -158,8 +155,8 @@ export default {
     let periods = A(),
         actChilds = A() ,
         actIndex = 0,
-        actDate = this.getNewDate(periodStart).getTime(), // assure 0 hours UTC
-        endDate = this.datePlusDays(periodEnd, 1).getTime(),
+        actDate = this.getNewDate(new Date(periodStart).getTime()).getTime(), // assure 0 hours 
+        endDate = this.datePlusDays(new Date(periodEnd).getTime(), 1).getTime(),
         dateMap = this.preparePeriodDateMap(childs, periodStart, periodEnd);
 
     let debugmax = 0;
@@ -189,7 +186,7 @@ export default {
       // add period entry with active childs
       periods.pushObject({
         dateStart: this.getNewDate(actDate),
-        dateEnd: this.datePlusDays(nextDate, -1), // including last day
+        dateEnd: this.datePlusDays(new Date(nextDate).getTime(), -1), // including last day
         childs: A(actChilds.toArray()) // clone it
       });
 
@@ -269,16 +266,16 @@ export default {
 
       // first month
       if (isEqual(startDate, actDate)) {
-        startDay = actDate.getUTCDate();
+        startDay = actDate.getDate();
       } else {
-        actDate.setUTCDate(1);
+        actDate.setDate(1);
       }
 
       // last month
-      if (actDate.getUTCMonth() === endDate.getUTCMonth() &&
-          actDate.getUTCFullYear() === endDate.getUTCFullYear()) {
+      if (actDate.getMonth() === endDate.getMonth() &&
+          actDate.getFullYear() === endDate.getFullYear()) {
 
-        lastDay = endDate.getUTCDate();
+        lastDay = endDate.getDate();
       }
 
       // month data
@@ -298,8 +295,8 @@ export default {
         let dayDate = this.getNewDate(actDate);
         let day = {
           nr: d,
-          date: dayDate.setUTCDate(d),
-          isWeekend: ([0,6].indexOf(dayDate.getUTCDay()) >=0),
+          date: dayDate.setDate(d),
+          isWeekend: ([0,6].indexOf(dayDate.getDay()) >=0),
           title: '',
           class: ''
         };
@@ -315,7 +312,7 @@ export default {
 
       // add days to month
       months.push(month);
-      actDate.setUTCMonth(actDate.getUTCMonth()+1);
+      actDate.setMonth(actDate.getMonth()+1);
     }
 
     return months;
@@ -336,7 +333,7 @@ export default {
 
     let cws = [];
     let firstCW = this.getCW(startDate);
-    let firstWD = startDate.getUTCDay() || 7; // Sunday -> 7
+    let firstWD = startDate.getDay() || 7; // Sunday -> 7
     let firstCWrest = 8 - firstWD;
     let actDate = this.getNewDate(startDate.getTime());
 
@@ -344,10 +341,10 @@ export default {
     cws.push({ date: firstCW, nr: this.getCW(startDate), width: htmlSafe('width: ' + (firstCWrest * dayWidth) + 'px;') }); // special width for first/last
 
     // middle cws
-    actDate = this.datePlusDays(startDate, firstCWrest);
+    actDate = this.datePlusDays(new Date(startDate.getTime()), firstCWrest);
     while(actDate <= endDate) {
       cws.push({ date: this.getNewDate(actDate), nr: this.getCW(actDate) });
-      actDate.setUTCDate(actDate.getUTCDate() + 7); // add 7 days
+      actDate.setDate(actDate.getDate() + 7); // add 7 days
     }
 
     // adjust last cw
@@ -377,14 +374,14 @@ export default {
     // middle cws
     while(actDate <= endDate) {
 
-      let nextDate = this.getNewDate( (actDate.getUTCFullYear()+1) + '-01-01');
+      let nextDate = this.getNewDate( (actDate.getFullYear()+1) + '-01-01');
       nextDate = (endDate <= nextDate) ? endDate : nextDate; // max until endDate
 
-      let isLast = (actDate.getUTCFullYear() === nextDate.getUTCFullYear());
+      let isLast = (actDate.getFullYear() === nextDate.getFullYear());
 
       years.push({
         date: actDate,
-        nr: actDate.getUTCFullYear(),
+        nr: actDate.getFullYear(),
         width: htmlSafe( 'width:' + (this.diffDays(actDate, nextDate, isLast) * dayWidth) + 'px' ),
       });
 
@@ -422,16 +419,16 @@ export default {
 
     locale = locale || window.navigator.userLanguage || window.navigator.language || 'EN-US';
 
-    let options = { month: (short ? 'short' : 'long' ), timeZone: 'UTC' };
+    let options = { month: (short ? 'short' : 'long' ) };
     let monthName = date.toLocaleDateString(locale, options);
 
     if (isEmpty(monthName) || /[0-9]/.test(monthName)) {
-      monthName = this.monthNames[ date.getUTCMonth() ];
+      monthName = this.monthNames[ date.getMonth() ];
       monthName = short ? monthName.substring(0,3) : monthName;
     }
 
     if (!short) {
-      monthName+= ' ' + date.getUTCFullYear();
+      monthName+= ' ' + date.getFullYear();
     }
 
     return monthName;
