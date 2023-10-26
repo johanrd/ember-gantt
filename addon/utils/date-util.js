@@ -343,7 +343,7 @@ export default {
     // middle cws
     actDate = this.datePlusDays(new Date(startDate.getTime()), firstCWrest);
     while(actDate <= endDate) {
-      cws.push({ date: this.getNewDate(actDate), nr: this.getCW(actDate) });
+      cws.push({ date: this.getNewDate(actDate), nr: this.getCW(actDate), width: htmlSafe('width: ' + (7 * dayWidth) + 'px;') });
       actDate.setDate(actDate.getDate() + 7); // add 7 days
     }
 

@@ -230,7 +230,7 @@ export default Component.extend({
     let scaleWidth = this.calculateScaleWidth(dayWidth, start, end);
 
     if (scaleWidth < get(chart, 'ganttWidth')) {
-      end = chart.offsetToDate(get(chart, 'ganttWidth') * 1.5);
+      end = chart.offsetToDate(get(chart, 'ganttWidth'));
       scaleWidth = this.calculateScaleWidth(dayWidth, start, end);
     }
 

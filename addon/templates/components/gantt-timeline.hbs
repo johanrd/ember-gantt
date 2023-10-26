@@ -14,22 +14,34 @@
   {{! vertical grid}}
   <div class="gantt-timeline-vertical-grid">
 
-    {{#if this.timelineMonth}}
-      <div class="gantt-timeline-days">
-        {{#each this.timelineScale.months as |month|}}
-          {{#each month.days as |day|}}
-            <div class="day {{if day.isWeekend 'day-weekend'}} {{if day.class day.class}}">{{#if day.title}}<em>{{day.title}}</em>{{/if}} </div>
-          {{/each}}
-        {{/each}}
-      </div>
+      {{! days in month }}
+      {{#if this.timelineDay}}
+        <div class="gantt-timeline-days">
+          {{#each this.timelineScale.months as |month|}}
 
-    {{else}}
-      <div class="gantt-timeline-years" >
-        {{#each this.timelineScale.years as |year|}}
-          <div class="gantt-timeline-year" style={{year.width}}> </div>
-        {{/each}}
-      </div>
-    {{/if}}
+            {{#each month.days as |day|}}
+              <div class="day {{if day.isWeekend 'day-weekend'}} {{if day.class day.class}}">{{#if day.title}}<em>{{day.title}}</em>{{/if}} </div>
+            {{/each}}
+          {{/each}}
+        </div>
+
+      {{! calendar weeks }}
+      {{else if this.timelineCW}}
+        <div class="gantt-timeline-cws">
+          {{#each this.timelineScale.calendarWeeks as |cw|}}
+
+            <div class="gantt-timeline-cw" style={{cw.width}}>{{cw.nr}}</div>
+          {{/each}}
+        </div>
+
+      {{! months }}
+      {{else if this.timelineMonth}}
+        <div class="gantt-timeline-months" >
+          {{#each this.timelineScale.months as |month|}}
+            <div class="gantt-timeline-month" style={{month.style}}></div>
+          {{/each}}
+        </div>
+      {{/if}}
 
   </div>
 
