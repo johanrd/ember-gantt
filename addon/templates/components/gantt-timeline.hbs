@@ -30,8 +30,10 @@
         <div class="gantt-timeline-cws">
           {{#each this.timelineScale.calendarWeeks as |cw|}}
 
-            <div class="gantt-timeline-cw" style={{cw.width}}>{{cw.nr}}</div>
+            <div class="gantt-timeline-cw" style={{cw.width}}></div>
           {{/each}}
+          <div class="day today" style={{html-safe (concat "width:" this.dayWidth "px; position: absolute; right: 0;")}}></div>
+
         </div>
 
       {{! months }}
@@ -40,6 +42,7 @@
           {{#each this.timelineScale.months as |month|}}
             <div class="gantt-timeline-month" style={{month.style}}></div>
           {{/each}}
+          <div class="day today" style={{html-safe (concat "width:" this.dayWidth "px; position: absolute; right: 0;")}}></div>
         </div>
       {{/if}}
 
@@ -109,7 +112,11 @@
         <div class="gantt-timeline-days">
           {{#each this.timelineScale.months as |month|}}
             {{#each month.days as |day|}}
-              <div class="day {{if day.isWeekend 'day-weekend'}} {{if day.class day.class}}">{{day.nr}}</div>
+              <div class="day {{if day.isWeekend 'day-weekend'}} {{if day.class day.class}}">
+                {{#if (gt this.dayWidth 15)}}
+                  {{day.nr}}
+                {{/if}}
+              </div>
             {{/each}}
           {{/each}}
         </div>

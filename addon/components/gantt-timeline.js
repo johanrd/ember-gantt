@@ -177,16 +177,16 @@ export default Component.extend({
     let dayWidth = get(this, 'dayWidth');
     let views = { timelineDay: true, timelineCW: true, timelineMonth: true, timelineMonthShort: false, timelineYear: false }
 
-    if (dayWidth < 20) { // cw's instead of days
+    if (dayWidth < 10) { // cw's instead of days
       views.timelineDay = false;
       views.timelineCW = true;
     }
 
-    if (dayWidth < 15) { // months
+    if (dayWidth < 8) { // months
       // views.timelineMonth = true;
     }
 
-    if (dayWidth < 10) { // months (small)
+    if (dayWidth < 8) { // months (small)
       views.timelineYear = true;
       views.timelineMonthShort = true;
     }
@@ -195,7 +195,12 @@ export default Component.extend({
       views.timelineYear = true;
       views.timelineCW = false;
     }
-    if (dayWidth < 2) { // year only
+    if (dayWidth < 2) {
+      views.timelineYear = true;
+      views.timelineMonth = true;
+    }
+
+    if (dayWidth < 1) { // year only
       views.timelineYear = true;
       views.timelineMonth = false;
     }
