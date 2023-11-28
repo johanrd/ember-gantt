@@ -312,7 +312,10 @@ export default {
 
       // add days to month
       months.push(month);
-      actDate.setMonth(actDate.getMonth()+1);
+
+      // next month
+      actDate.setMonth(actDate.getMonth()+1)
+      actDate.setDate(1);
     }
 
     return months;
