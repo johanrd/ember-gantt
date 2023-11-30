@@ -256,7 +256,7 @@ export default {
     specialDays = specialDays || {};
 
     // MONTHS AND DAYS
-    while(actDate < endDate) {
+    while(actDate <= endDate) {
 
       // from/to days
       let startDay = 1;
