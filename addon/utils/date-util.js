@@ -314,8 +314,16 @@ export default {
       months.push(month);
 
       // next month
-      actDate.setMonth(actDate.getMonth()+1)
-      actDate.setDate(1);
+      actDate.setDate(1); // Set to the first day of the current month
+      let currentMonth = actDate.getMonth();
+
+      // Check if the current month is December
+      if (currentMonth === 11) {
+        actDate.setFullYear(actDate.getFullYear() + 1); // Increment year
+        actDate.setMonth(0); // Set to January (month index 0)
+      } else {
+        actDate.setMonth(currentMonth + 1); // Increment month
+      }
     }
 
     return months;
