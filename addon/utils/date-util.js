@@ -78,9 +78,7 @@ export default {
    * @public
    */
   daysInMonth(date) {
-    let newDate = this.getNewDate(date);
-    newDate.setMonth(newDate.getMonth()+1);
-    newDate.setDate(0);  // set to last day of previous month
+    let newDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return newDate.getDate();
   },
 
